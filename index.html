@@ -111,10 +111,10 @@
                 </button>
             </div>
 
-            <!-- Step 0.5: Voice Profile (Sensitivity Layer) -->
+            <!-- Step 0.5: Voice Profile -->
             <div id="step-anatomy" class="hidden-section">
                 <h2 class="text-2xl font-bold mb-2">Your Voice Profile</h2>
-                <p class="mb-6 opacity-80 italic">To help us calculate your range accurately, which best describes your vocal instrument?</p>
+                <p class="mb-6 opacity-80 italic">Which best describes your vocal instrument right now?</p>
                 <div class="flex flex-col gap-4 mb-8">
                     <button onclick="setAnatomy('treble')" class="anatomy-btn p-5 rounded-2xl text-left" data-anatomy="treble">
                         <span class="text-xl font-bold block">Higher / Treble Voice</span>
@@ -130,7 +130,7 @@
                 </button>
             </div>
 
-            <!-- Step 1: Start & Mic Check -->
+            <!-- Step 1: Start -->
             <div id="step-start" class="hidden-section">
                 <div class="mb-6 text-5xl">🎤</div>
                 <h2 class="text-2xl font-bold mb-4">Ready, <span id="display-name-welcome">Singer</span>?</h2>
@@ -184,7 +184,7 @@
                 </button>
             </div>
 
-            <!-- Step 3: Tessitura Assessment -->
+            <!-- Step 3: Tessitura -->
             <div id="step-tessitura" class="hidden-section">
                 <h2 class="text-2xl bungee text-yellow-300 mb-6">The Comfort Test</h2>
                 <div class="mb-8 text-left">
@@ -265,60 +265,53 @@
         let maxMidi = -Infinity;
         let userName = "";
         let userChoir = null;
-        let userAnatomy = null; // 'treble' or 'lower'
+        let userAnatomy = null; 
         let userSweetSpot = null;
         let userEasyStreet = null;
         let finalType = "";
 
         const voiceProfiles = {
             'Soprano': { 
-                emoji: '✨', 
-                superpower: 'Sky Whistler', 
+                emoji: '✨', superpower: 'Sky Whistler', 
                 text: 'You can reach notes as high as the clouds! Your voice adds the brilliant sparkle and melody.', 
                 famous: 'Ariana Grande, Kristin Chenoweth, Audra McDonald',
-                songs: '"Think of Me" (Phantom), "Popular" (Wicked), "Vanilla Ice Cream" (She Loves Me)'
+                songs: '"Think of Me" (Phantom), "Popular" (Wicked)'
             },
             'Mezzo-Soprano': { 
-                emoji: '🌟', 
-                superpower: 'Glow Weaver', 
+                emoji: '🌟', superpower: 'Glow Weaver', 
                 text: 'You have a versatile, glowing voice! You provide amazing warmth and can sing many different styles.', 
                 famous: 'Beyoncé, Idina Menzel, Sara Bareilles',
-                songs: '"On My Own" (Les Mis), "Watch What Happens" (Newsies), "Journey to the Past" (Anastasia)'
+                songs: '"On My Own" (Les Mis), "Journey to the Past" (Anastasia)'
             },
             'Alto': { 
-                emoji: '🌈', 
-                superpower: 'Harmony Hero', 
+                emoji: '🌈', superpower: 'Harmony Hero', 
                 text: 'You have a rich, warm tone. Your voice has a grounded, soulful quality that sounds beautiful!', 
                 famous: 'Adele, P!nk, Keala Settle',
-                songs: '"This Is Me" (Greatest Showman), "I Know the Truth" (Aida), "Cabaret" (Cabaret)'
+                songs: '"This Is Me" (Greatest Showman), "Cabaret" (Cabaret)'
             },
             'Cambiata': { 
-                emoji: '🌀', 
-                superpower: 'Shape Shifter', 
+                emoji: '🌀', superpower: 'Shape Shifter', 
                 text: 'Your voice is going through an amazing transformation! You have a cool, unique tone that is shifting into its adult sound.', 
                 famous: 'Justin Bieber (early), Shawn Mendes',
-                songs: '"Electricity" (Billy Elliot), "Where is Love?" (Oliver!), "Giants in the Sky" (Into the Woods)'
+                songs: '"Electricity" (Billy Elliot), "Giants in the Sky" (Into the Woods)'
             },
             'Tenor': { 
-                emoji: '🔥', 
-                superpower: 'Vocal Vulcan', 
+                emoji: '🔥', superpower: 'Vocal Vulcan', 
                 text: 'You have a brilliant, heroic sound! Your voice is bright and handles high energy with ease.', 
                 famous: 'Bruno Mars, Lin-Manuel Miranda, Ben Platt',
-                songs: '"Corner of the Sky" (Pippin), "Santa Fe" (Newsies), "Waving Through a Window" (DEH)'
+                songs: '"Corner of the Sky" (Pippin), "Santa Fe" (Newsies)'
             },
             'Baritone': { 
-                emoji: '⛰️', 
-                superpower: 'Earth Shaker', 
+                emoji: '⛰️', superpower: 'Earth Shaker', 
                 text: 'Your voice is deep and powerful like a drum! You provide the solid foundation for any song.', 
                 famous: 'Josh Groban, Hugh Jackman, Leslie Odom Jr.',
-                songs: '"Stars" (Les Mis), "The Impossible Dream" (Man of La Mancha), "If I Can\'t Love Her" (B&TB)'
+                songs: '"Stars" (Les Mis), "If I Can\'t Love Her" (B&TB)'
             },
             'Bass': { 
-                emoji: '🌋', 
-                superpower: 'Deep Thunder', 
+                emoji: '🌋', superpower: 'Deep Thunder', 
                 text: 'Your voice is incredibly deep and resonant. You have the low notes that make everyone stop and listen!', 
                 famous: 'Avi Kaplan, James Earl Jones, Barry White',
-                songs: '"Ol\' Man River" (Show Boat), "Hellfire" (Hunchback), "This Nearly Was Mine" (South Pacific)'
+                songs: '"Ol\' Man River" (Show Boat), "Hellfire" (Hunchback)'
             }
         };
 
@@ -337,14 +330,11 @@
         }
 
         function handleChoirNext() {
-            // Anatomy question is needed for Beginning, Mixed, and Solo paths
             const needsAnatomy = ['beginning', 'mixed', 'solo'].includes(userChoir);
-            
             if (needsAnatomy) {
                 document.getElementById('step-choir').classList.add('hidden-section');
                 document.getElementById('step-anatomy').classList.remove('hidden-section');
             } else {
-                // Set defaults based on choir if skipping
                 userAnatomy = (userChoir === 'treble') ? 'treble' : 'lower';
                 goToStart();
             }
@@ -364,15 +354,10 @@
             document.getElementById('step-start').classList.remove('hidden-section');
         }
 
-        function startApp() {
-            initAudio();
-        }
+        function startApp() { initAudio(); }
 
         async function initAudio() {
             try {
-                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                    throw new Error("Hardware access blocked.");
-                }
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 if (audioContext.state === 'suspended') await audioContext.resume();
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -388,26 +373,6 @@
             } catch (err) {
                 document.getElementById('error-overlay').classList.remove('hidden');
             }
-        }
-
-        async function playGuideNote(direction) {
-            if (!audioContext) return;
-            let nextMidi = guideMidi;
-            let found = false;
-            while (!found) {
-                nextMidi += direction;
-                if (whiteKeyIndices.includes(nextMidi % 12)) found = true;
-                if (nextMidi < 21 || nextMidi > 108) { nextMidi = guideMidi; found = true; }
-            }
-            guideMidi = nextMidi;
-            document.getElementById('guide-note-display').innerText = getNoteName(guideMidi);
-            const osc = audioContext.createOscillator();
-            const gain = audioContext.createGain();
-            osc.frequency.setValueAtTime(440 * Math.pow(2, (guideMidi - 69) / 12), audioContext.currentTime);
-            gain.gain.setValueAtTime(0.2, audioContext.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 1);
-            osc.connect(gain); gain.connect(audioContext.destination);
-            osc.start(); osc.stop(audioContext.currentTime + 1);
         }
 
         function updatePitch() {
@@ -431,10 +396,6 @@
             requestAnimationFrame(updatePitch);
         }
 
-        function getNoteName(midi) {
-            return noteStrings[midi % 12] + (Math.floor(midi / 12) - 1);
-        }
-
         function autoCorrelate(buf, sampleRate) {
             let SIZE = buf.length, rms = 0;
             for (let i = 0; i < SIZE; i++) rms += buf[i] * buf[i];
@@ -446,6 +407,23 @@
             for (let i = d; i < SIZE; i++) { if (c[i] > maxval) { maxval = c[i]; maxpos = i; } }
             if (maxpos === -1 || (maxval / c[0]) < 0.7) return -1;
             return sampleRate / maxpos;
+        }
+
+        function playGuideNote(direction) {
+            if (!audioContext) return;
+            guideMidi += direction;
+            document.getElementById('guide-note-display').innerText = getNoteName(guideMidi);
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.frequency.setValueAtTime(440 * Math.pow(2, (guideMidi - 69) / 12), audioContext.currentTime);
+            gain.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 1);
+            osc.connect(gain); gain.connect(audioContext.destination);
+            osc.start(); osc.stop(audioContext.currentTime + 1);
+        }
+
+        function getNoteName(midi) {
+            return noteStrings[midi % 12] + (Math.floor(midi / 12) - 1);
         }
 
         function goToTessitura() {
@@ -471,7 +449,15 @@
 
             if (userChoir === 'beginning') {
                 if (userAnatomy === 'lower') {
-                    type = 'Cambiata';
+                    // Logic for boys in Beginning Choir
+                    const significantlyLower = minMidi < 48; // Below C3
+                    const narrowRange = (maxMidi - minMidi) < 14; 
+                    
+                    if (significantlyLower || (narrowRange && userSweetSpot === 'low')) {
+                        type = 'Cambiata';
+                    } else {
+                        type = 'Alto';
+                    }
                 } else {
                     const hitSopranoRange = maxMidi >= 77;
                     if (hitSopranoRange && userSweetSpot === 'high') type = 'Soprano';
@@ -480,9 +466,8 @@
             } 
             else if (userChoir === 'treble') {
                 const hitS1Range = maxMidi >= 79;
-                const prefersMid = (userSweetSpot === 'mid' || userEasyStreet === 'mid');
-                if (hitS1Range && userSweetSpot === 'high' && !prefersMid) type = 'Soprano';
-                else if (minMidi <= 53 && userSweetSpot === 'low' && !prefersMid) type = 'Alto';
+                if (hitS1Range && userSweetSpot === 'high') type = 'Soprano';
+                else if (minMidi <= 53 && userSweetSpot === 'low') type = 'Alto';
                 else type = 'Mezzo-Soprano';
             }
             else if (userChoir === 'tenorbass') {
@@ -499,7 +484,6 @@
                 }
             }
             else if (userChoir === 'solo') {
-                const rangeSize = maxMidi - minMidi;
                 if (userAnatomy === 'lower') {
                     if (minMidi <= 41) type = 'Bass';
                     else if (minMidi <= 50) type = 'Baritone';
@@ -512,7 +496,7 @@
                 }
             }
 
-            finalType = type || 'Alto'; // Fallback
+            finalType = type || 'Alto';
             const d = voiceProfiles[finalType];
             document.getElementById('voice-type').innerText = finalType;
             document.getElementById('result-emoji').innerText = d.emoji;
@@ -523,7 +507,7 @@
         }
 
         function downloadResults() {
-            const content = `VOCAL QUEST MISSION COMPLETE\nNAME: ${userName}\nCHOIR: ${userChoir}\nVOICE PROFILE: ${userAnatomy}\nTYPE: ${finalType}\nRANGE: ${getNoteName(minMidi)} - ${getNoteName(maxMidi)}\nSONGS: ${voiceProfiles[finalType].songs}`;
+            const content = `VOCAL QUEST MISSION COMPLETE\nNAME: ${userName}\nCHOIR: ${userChoir}\nTYPE: ${finalType}\nRANGE: ${getNoteName(minMidi)} - ${getNoteName(maxMidi)}`;
             const element = document.createElement('a');
             element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
             element.setAttribute('download', `${userName}_VocalQuest.txt`);
