@@ -35,7 +35,7 @@
             animation: pulse-animation 2s infinite;
         }
         @keyframes pulse-animation {
-            0% { box-shadow: 0 0 0 0px rgba(255, 255, 255, 0.4); }
+            0 { box-shadow: 0 0 0 0px rgba(255, 255, 255, 0.4); }
             100% { box-shadow: 0 0 0 20px rgba(255, 255, 255, 0); }
         }
         .hidden-section {
@@ -54,14 +54,14 @@
             background: #facc15;
             color: #1e1b4b;
         }
-        .tess-btn, .choir-btn {
+        .tess-btn, .choir-btn, .anatomy-btn {
             background: rgba(255, 255, 255, 0.1);
             border: 2px solid rgba(255, 255, 255, 0.2);
             transition: all 0.2s;
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
         }
-        .tess-btn.selected, .choir-btn.selected {
+        .tess-btn.selected, .choir-btn.selected, .anatomy-btn.selected {
             background: #facc15;
             color: #1e1b4b;
             border-color: #facc15;
@@ -88,23 +88,45 @@
                            oninput="checkFirstStep()">
                 </div>
 
-                <h2 class="text-2xl font-bold mb-4">Which choir are you in?</h2>
+                <h2 class="text-2xl font-bold mb-4">Select Your Quest:</h2>
                 <div class="flex flex-col gap-3 mb-8">
-                    <button onclick="setChoir('beginning')" class="choir-btn p-4 rounded-xl text-left font-bold" data-choir="beginning">
-                        Beginning Choir <span class="block text-xs font-normal opacity-80 mt-1">(Soprano, Mezzo, Alto, Cambiata)</span>
+                    <button onclick="setChoir('beginning')" class="choir-btn p-3 rounded-xl text-left font-bold" data-choir="beginning">
+                        Beginning Choir <span class="block text-xs font-normal opacity-80 mt-1">(Soprano & Alto)</span>
                     </button>
-                    <button onclick="setChoir('treble')" class="choir-btn p-4 rounded-xl text-left font-bold" data-choir="treble">
-                        Intermediate Treble Choir <span class="block text-xs font-normal opacity-80 mt-1">(Soprano, Mezzo, Alto)</span>
+                    <button onclick="setChoir('treble')" class="choir-btn p-3 rounded-xl text-left font-bold" data-choir="treble">
+                        Intermediate Treble Choir <span class="block text-xs font-normal opacity-80 mt-1">(S1, S2, Alto)</span>
                     </button>
-                    <button onclick="setChoir('tenorbass')" class="choir-btn p-4 rounded-xl text-left font-bold" data-choir="tenorbass">
-                        Intermediate Tenor-Bass Choir <span class="block text-xs font-normal opacity-80 mt-1">(Cambiata, Tenor, Baritone)</span>
+                    <button onclick="setChoir('tenorbass')" class="choir-btn p-3 rounded-xl text-left font-bold" data-choir="tenorbass">
+                        Intermediate Tenor-Bass Choir <span class="block text-xs font-normal opacity-80 mt-1">(Tenor & Baritone)</span>
                     </button>
-                    <button onclick="setChoir('mixed')" class="choir-btn p-4 rounded-xl text-left font-bold" data-choir="mixed">
-                        Advanced Mixed Choir <span class="block text-xs font-normal opacity-80 mt-1">(All Voice Types)</span>
+                    <button onclick="setChoir('mixed')" class="choir-btn p-3 rounded-xl text-left font-bold" data-choir="mixed">
+                        Advanced Mixed Choir <span class="block text-xs font-normal opacity-80 mt-1">(Sop, Alto, Baritone)</span>
+                    </button>
+                    <button onclick="setChoir('solo')" class="choir-btn p-4 rounded-xl text-left font-bold border-yellow-400 border-2" data-choir="solo">
+                        ✨ SOLO QUEST ✨ <span class="block text-xs font-normal opacity-80 mt-1">(Full range: Soprano to Bass + Audition Songs)</span>
                     </button>
                 </div>
-                <button id="choir-next-btn" onclick="goToStart()" class="opacity-50 pointer-events-none bg-yellow-400 text-purple-900 font-bold py-4 px-10 rounded-full text-xl shadow-xl w-full">
+                <button id="choir-next-btn" onclick="handleChoirNext()" class="opacity-50 pointer-events-none bg-yellow-400 text-purple-900 font-bold py-4 px-10 rounded-full text-xl shadow-xl w-full">
                     NEXT
+                </button>
+            </div>
+
+            <!-- Step 0.5: Voice Profile (Sensitivity Layer) -->
+            <div id="step-anatomy" class="hidden-section">
+                <h2 class="text-2xl font-bold mb-2">Your Voice Profile</h2>
+                <p class="mb-6 opacity-80 italic">To help us calculate your range accurately, which best describes your vocal instrument?</p>
+                <div class="flex flex-col gap-4 mb-8">
+                    <button onclick="setAnatomy('treble')" class="anatomy-btn p-5 rounded-2xl text-left" data-anatomy="treble">
+                        <span class="text-xl font-bold block">Higher / Treble Voice</span>
+                        <span class="text-sm opacity-80">My voice hasn't changed or naturally sits in a higher range.</span>
+                    </button>
+                    <button onclick="setAnatomy('lower')" class="anatomy-btn p-5 rounded-2xl text-left" data-anatomy="lower">
+                        <span class="text-xl font-bold block">Lower / Changing Voice</span>
+                        <span class="text-sm opacity-80">My voice is deeper or currently shifting lower.</span>
+                    </button>
+                </div>
+                <button id="anatomy-next-btn" onclick="goToStart()" class="opacity-50 pointer-events-none bg-yellow-400 text-purple-900 font-bold py-4 px-10 rounded-full text-xl shadow-xl w-full">
+                    CONTINUE QUEST
                 </button>
             </div>
 
@@ -116,7 +138,6 @@
                 <button onclick="startApp()" class="mic-button bg-yellow-400 hover:bg-yellow-300 text-purple-900 font-bold py-5 px-12 rounded-full text-xl shadow-xl">
                     ENABLE MIC & START
                 </button>
-                <p class="mt-4 text-xs opacity-70 italic">Note: Your iPad will ask for permission. Please tap "Allow".</p>
             </div>
 
             <!-- Step 2: Listening -->
@@ -126,7 +147,7 @@
                 </div>
                 
                 <div class="mb-8 p-4 bg-white bg-opacity-10 rounded-2xl border border-white border-opacity-10">
-                    <p class="text-sm uppercase tracking-wider mb-3 opacity-80">Pitch Guide (White Keys Only)</p>
+                    <p class="text-sm uppercase tracking-wider mb-3 opacity-80">Pitch Guide</p>
                     <div class="flex items-center justify-center gap-4">
                         <button onclick="playGuideNote(-1)" class="pitch-btn px-5 py-3 rounded-lg flex flex-col items-center">
                             <span class="text-xl">⬇️</span>
@@ -195,13 +216,20 @@
                     <p id="display-final-name" class="text-2xl font-bold text-white border-b-2 border-white border-opacity-20 pb-2 inline-block px-4">Student Name</p>
                 </div>
                 <h3 class="text-xl opacity-80 mb-1">Your Voice Type is...</h3>
-                <h2 id="voice-type" class="text-5xl bungee text-yellow-300 mb-4 tracking-wider">TENOR</h2>
+                <h2 id="voice-type" class="text-5xl bungee text-yellow-300 mb-4 tracking-wider uppercase">TENOR</h2>
                 <div class="bg-white bg-opacity-10 p-6 rounded-2xl mb-4 text-left border border-yellow-300 border-opacity-30">
                     <h4 class="text-pink-300 font-bold text-xl mb-2">Your Superpower: <span id="superpower-name">Sonic Boom</span></h4>
                     <p id="encouragement" class="text-lg leading-relaxed italic mb-4"></p>
-                    <hr class="border-white border-opacity-20 mb-4">
-                    <h5 class="text-yellow-200 font-bold text-sm uppercase tracking-widest mb-2">Famous Vocal Twins:</h5>
-                    <p id="famous-singers" class="text-md opacity-90"></p>
+                    
+                    <div id="extra-info-container" class="mt-4 pt-4 border-t border-white border-opacity-20">
+                        <h5 class="text-yellow-200 font-bold text-sm uppercase tracking-widest mb-2">Famous Vocal Twins:</h5>
+                        <p id="famous-singers" class="text-md opacity-90 mb-4"></p>
+                        
+                        <div id="audition-songs-box" class="bg-purple-900 bg-opacity-40 p-4 rounded-xl border border-indigo-400">
+                            <h5 class="text-green-300 font-bold text-sm uppercase tracking-widest mb-2">🎭 Audition Song Ideas:</h5>
+                            <p id="audition-songs" class="text-md opacity-90 italic"></p>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="flex flex-col gap-3">
@@ -219,7 +247,6 @@
                 <div id="error-details" class="text-left text-sm space-y-4 opacity-90">
                     <p><strong>1. Privacy Settings:</strong> Go to iPad Settings > Privacy > Microphone and make sure Safari is ON.</p>
                     <p><strong>2. Site Settings:</strong> Tap the 'AA' icon in the Safari address bar and select 'Website Settings'. Set Microphone to 'Allow'.</p>
-                    <p><strong>3. Schools Devices:</strong> If you are using a managed iPad, your school might have disabled microphone recording in 'Screen Time' restrictions.</p>
                 </div>
                 <button onclick="location.reload()" class="mt-8 bg-white text-purple-900 px-6 py-2 rounded-full font-bold">Try Again</button>
             </div>
@@ -238,24 +265,61 @@
         let maxMidi = -Infinity;
         let userName = "";
         let userChoir = null;
+        let userAnatomy = null; // 'treble' or 'lower'
         let userSweetSpot = null;
         let userEasyStreet = null;
         let finalType = "";
 
         const voiceProfiles = {
-            'Soprano': { emoji: '✨', superpower: 'Sky Whistler', text: 'You can reach notes as high as the clouds! Your voice adds the sparkle and melody.', famous: 'Ariana Grande, Kristin Chenoweth, Audra McDonald' },
-            'Mezzo-Soprano': { emoji: '🌟', superpower: 'Glow Weaver', text: 'You have a versatile, glowing voice! You are the secret ingredient that makes a choir sound rich.', famous: 'Beyoncé, Idina Menzel, Sara Bareilles' },
-            'Alto': { emoji: '🌈', superpower: 'Harmony Hero', text: 'You have a rich, warm tone that glues the choir together.', famous: 'Adele, P!nk, Keala Settle' },
-            'Cambiata': { emoji: '🌀', superpower: 'Shape Shifter', text: 'Your voice is going through an amazing transformation! Your unique tone is a vital bridge.', famous: 'Justin Bieber (early), Shawn Mendes' },
-            'Tenor': { emoji: '🔥', superpower: 'Vocal Vulcan', text: 'You have a brilliant, heroic sound! You bridge the gap with amazing energy.', famous: 'Bruno Mars, Lin-Manuel Miranda, Ben Platt' },
-            'Baritone': { emoji: '⛰️', superpower: 'Earth Shaker', text: 'Your voice is deep and powerful like a drum! You are the strong foundation.', famous: 'Josh Groban, Hugh Jackman, Leslie Odom Jr.' }
-        };
-
-        const choirCapabilities = {
-            'beginning': ['Soprano', 'Mezzo-Soprano', 'Alto', 'Cambiata'],
-            'treble': ['Soprano', 'Mezzo-Soprano', 'Alto'],
-            'tenorbass': ['Cambiata', 'Tenor', 'Baritone'],
-            'mixed': ['Soprano', 'Mezzo-Soprano', 'Alto', 'Cambiata', 'Tenor', 'Baritone']
+            'Soprano': { 
+                emoji: '✨', 
+                superpower: 'Sky Whistler', 
+                text: 'You can reach notes as high as the clouds! Your voice adds the brilliant sparkle and melody.', 
+                famous: 'Ariana Grande, Kristin Chenoweth, Audra McDonald',
+                songs: '"Think of Me" (Phantom), "Popular" (Wicked), "Vanilla Ice Cream" (She Loves Me)'
+            },
+            'Mezzo-Soprano': { 
+                emoji: '🌟', 
+                superpower: 'Glow Weaver', 
+                text: 'You have a versatile, glowing voice! You provide amazing warmth and can sing many different styles.', 
+                famous: 'Beyoncé, Idina Menzel, Sara Bareilles',
+                songs: '"On My Own" (Les Mis), "Watch What Happens" (Newsies), "Journey to the Past" (Anastasia)'
+            },
+            'Alto': { 
+                emoji: '🌈', 
+                superpower: 'Harmony Hero', 
+                text: 'You have a rich, warm tone. Your voice has a grounded, soulful quality that sounds beautiful!', 
+                famous: 'Adele, P!nk, Keala Settle',
+                songs: '"This Is Me" (Greatest Showman), "I Know the Truth" (Aida), "Cabaret" (Cabaret)'
+            },
+            'Cambiata': { 
+                emoji: '🌀', 
+                superpower: 'Shape Shifter', 
+                text: 'Your voice is going through an amazing transformation! You have a cool, unique tone that is shifting into its adult sound.', 
+                famous: 'Justin Bieber (early), Shawn Mendes',
+                songs: '"Electricity" (Billy Elliot), "Where is Love?" (Oliver!), "Giants in the Sky" (Into the Woods)'
+            },
+            'Tenor': { 
+                emoji: '🔥', 
+                superpower: 'Vocal Vulcan', 
+                text: 'You have a brilliant, heroic sound! Your voice is bright and handles high energy with ease.', 
+                famous: 'Bruno Mars, Lin-Manuel Miranda, Ben Platt',
+                songs: '"Corner of the Sky" (Pippin), "Santa Fe" (Newsies), "Waving Through a Window" (DEH)'
+            },
+            'Baritone': { 
+                emoji: '⛰️', 
+                superpower: 'Earth Shaker', 
+                text: 'Your voice is deep and powerful like a drum! You provide the solid foundation for any song.', 
+                famous: 'Josh Groban, Hugh Jackman, Leslie Odom Jr.',
+                songs: '"Stars" (Les Mis), "The Impossible Dream" (Man of La Mancha), "If I Can\'t Love Her" (B&TB)'
+            },
+            'Bass': { 
+                emoji: '🌋', 
+                superpower: 'Deep Thunder', 
+                text: 'Your voice is incredibly deep and resonant. You have the low notes that make everyone stop and listen!', 
+                famous: 'Avi Kaplan, James Earl Jones, Barry White',
+                songs: '"Ol\' Man River" (Show Boat), "Hellfire" (Hunchback), "This Nearly Was Mine" (South Pacific)'
+            }
         };
 
         function checkFirstStep() {
@@ -272,9 +336,31 @@
             checkFirstStep();
         }
 
+        function handleChoirNext() {
+            // Anatomy question is needed for Beginning, Mixed, and Solo paths
+            const needsAnatomy = ['beginning', 'mixed', 'solo'].includes(userChoir);
+            
+            if (needsAnatomy) {
+                document.getElementById('step-choir').classList.add('hidden-section');
+                document.getElementById('step-anatomy').classList.remove('hidden-section');
+            } else {
+                // Set defaults based on choir if skipping
+                userAnatomy = (userChoir === 'treble') ? 'treble' : 'lower';
+                goToStart();
+            }
+        }
+
+        function setAnatomy(val) {
+            userAnatomy = val;
+            document.querySelectorAll('.anatomy-btn').forEach(b => b.classList.remove('selected'));
+            document.querySelector(`.anatomy-btn[data-anatomy="${val}"]`).classList.add('selected');
+            document.getElementById('anatomy-next-btn').classList.remove('opacity-50', 'pointer-events-none');
+        }
+
         function goToStart() {
             document.getElementById('display-name-welcome').innerText = userName;
             document.getElementById('step-choir').classList.add('hidden-section');
+            document.getElementById('step-anatomy').classList.add('hidden-section');
             document.getElementById('step-start').classList.remove('hidden-section');
         }
 
@@ -285,13 +371,11 @@
         async function initAudio() {
             try {
                 if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                    throw new Error("Your browser or device does not support microphone access in this view.");
+                    throw new Error("Hardware access blocked.");
                 }
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 if (audioContext.state === 'suspended') await audioContext.resume();
-                const stream = await navigator.mediaDevices.getUserMedia({ 
-                    audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } 
-                });
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 analyser = audioContext.createAnalyser();
                 const microphone = audioContext.createMediaStreamSource(stream);
                 analyser.fftSize = 2048;
@@ -302,14 +386,12 @@
                 document.getElementById('mic-viz').classList.add('pulse');
                 requestAnimationFrame(updatePitch);
             } catch (err) {
-                console.error("Mic access error:", err);
                 document.getElementById('error-overlay').classList.remove('hidden');
             }
         }
 
         async function playGuideNote(direction) {
             if (!audioContext) return;
-            if (audioContext.state === 'suspended') await audioContext.resume();
             let nextMidi = guideMidi;
             let found = false;
             while (!found) {
@@ -321,13 +403,11 @@
             document.getElementById('guide-note-display').innerText = getNoteName(guideMidi);
             const osc = audioContext.createOscillator();
             const gain = audioContext.createGain();
-            const freq = 440 * Math.pow(2, (guideMidi - 69) / 12);
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(freq, audioContext.currentTime);
-            gain.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 1.2);
+            osc.frequency.setValueAtTime(440 * Math.pow(2, (guideMidi - 69) / 12), audioContext.currentTime);
+            gain.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 1);
             osc.connect(gain); gain.connect(audioContext.destination);
-            osc.start(); osc.stop(audioContext.currentTime + 1.2);
+            osc.start(); osc.stop(audioContext.currentTime + 1);
         }
 
         function updatePitch() {
@@ -337,35 +417,34 @@
             const pitch = autoCorrelate(buffer, audioContext.sampleRate);
             if (pitch !== -1) {
                 const midi = Math.round(12 * Math.log2(pitch / 440) + 69);
-                if (midi >= 30 && midi <= 95) {
+                if (midi >= 24 && midi <= 95) {
                     document.getElementById('current-note').innerText = getNoteName(midi);
                     if (midi < minMidi) { minMidi = midi; document.getElementById('low-note-display').innerText = getNoteName(midi); }
                     if (midi > maxMidi) { maxMidi = midi; document.getElementById('high-note-display').innerText = getNoteName(midi); }
                     const progress = ((midi - 40) / (90 - 40)) * 100;
                     document.getElementById('pitch-progress').style.width = Math.max(5, Math.min(100, progress)) + '%';
-                    if (maxMidi !== -Infinity && minMidi !== Infinity && maxMidi - minMidi > 5) {
+                    if (maxMidi !== -Infinity && minMidi !== Infinity && maxMidi - minMidi > 4) {
                         document.getElementById('finish-btn').classList.remove('opacity-50', 'pointer-events-none');
                     }
                 }
-            } else { document.getElementById('current-note').innerText = "SING NOW..."; }
+            }
             requestAnimationFrame(updatePitch);
         }
 
         function getNoteName(midi) {
-            const note = noteStrings[midi % 12];
-            return note + (Math.floor(midi / 12) - 1);
+            return noteStrings[midi % 12] + (Math.floor(midi / 12) - 1);
         }
 
         function autoCorrelate(buf, sampleRate) {
             let SIZE = buf.length, rms = 0;
             for (let i = 0; i < SIZE; i++) rms += buf[i] * buf[i];
-            if (Math.sqrt(rms / SIZE) < 0.03) return -1;
+            if (Math.sqrt(rms / SIZE) < 0.02) return -1;
             let c = new Float32Array(SIZE);
             for (let i = 0; i < SIZE; i++) { for (let j = 0; j < SIZE - i; j++) c[i] = c[i] + buf[j] * buf[j + i]; }
             let d = 0; while (c[d] > c[d + 1]) d++;
             let maxval = -1, maxpos = -1;
             for (let i = d; i < SIZE; i++) { if (c[i] > maxval) { maxval = c[i]; maxpos = i; } }
-            if (maxpos === -1 || (maxval / c[0]) < 0.8) return -1;
+            if (maxpos === -1 || (maxval / c[0]) < 0.7) return -1;
             return sampleRate / maxpos;
         }
 
@@ -387,57 +466,68 @@
             document.getElementById('step-tessitura').classList.add('hidden-section');
             document.getElementById('step-results').classList.remove('hidden-section');
             document.getElementById('display-final-name').innerText = userName;
-            
-            let pScore = minMidi <= 48 ? 1 : minMidi <= 52 ? 2 : minMidi <= 55 ? 3 : minMidi <= 59 ? 4 : 5;
-            let adj = (userSweetSpot === 'low' ? -0.5 : userSweetSpot === 'high' ? 0.5 : 0) + (userEasyStreet === 'low' ? -0.5 : userEasyStreet === 'high' ? 0.5 : 0);
-            let final = pScore + adj;
-            let type = (maxMidi - minMidi < 16 && minMidi >= 45 && minMidi <= 55) ? 'Cambiata' : (final <= 1.5 ? 'Baritone' : final <= 2.5 ? 'Tenor' : final <= 3.5 ? 'Alto' : final <= 4.5 ? 'Mezzo-Soprano' : 'Soprano');
 
-            const allowed = choirCapabilities[userChoir];
-            if (!allowed.includes(type)) {
-                if (userChoir === 'tenorbass') type = final >= 3 ? 'Cambiata' : final >= 2 ? 'Tenor' : 'Baritone';
-                else if (final <= 1.5) type = userChoir === 'beginning' ? 'Cambiata' : 'Alto';
+            let type = "";
+
+            if (userChoir === 'beginning') {
+                if (userAnatomy === 'lower') {
+                    type = 'Cambiata';
+                } else {
+                    const hitSopranoRange = maxMidi >= 77;
+                    if (hitSopranoRange && userSweetSpot === 'high') type = 'Soprano';
+                    else type = 'Alto';
+                }
+            } 
+            else if (userChoir === 'treble') {
+                const hitS1Range = maxMidi >= 79;
+                const prefersMid = (userSweetSpot === 'mid' || userEasyStreet === 'mid');
+                if (hitS1Range && userSweetSpot === 'high' && !prefersMid) type = 'Soprano';
+                else if (minMidi <= 53 && userSweetSpot === 'low' && !prefersMid) type = 'Alto';
+                else type = 'Mezzo-Soprano';
+            }
+            else if (userChoir === 'tenorbass') {
+                if (minMidi <= 48 && userSweetSpot === 'low') type = 'Baritone';
+                else if (maxMidi >= 64 && userSweetSpot === 'high') type = 'Tenor';
+                else type = 'Cambiata';
+            }
+            else if (userChoir === 'mixed') {
+                if (userAnatomy === 'lower') {
+                    type = (minMidi > 50) ? 'Cambiata' : 'Baritone';
+                } else {
+                    if (maxMidi >= 79 && userSweetSpot === 'high') type = 'Soprano';
+                    else type = 'Alto';
+                }
+            }
+            else if (userChoir === 'solo') {
+                const rangeSize = maxMidi - minMidi;
+                if (userAnatomy === 'lower') {
+                    if (minMidi <= 41) type = 'Bass';
+                    else if (minMidi <= 50) type = 'Baritone';
+                    else if (maxMidi >= 72 && userSweetSpot === 'high') type = 'Tenor';
+                    else type = 'Cambiata';
+                } else {
+                    if (maxMidi >= 81 && userSweetSpot === 'high') type = 'Soprano';
+                    else if (minMidi <= 53 && userSweetSpot === 'low') type = 'Alto';
+                    else type = 'Mezzo-Soprano';
+                }
             }
 
-            finalType = type;
-            const d = voiceProfiles[type];
-            document.getElementById('voice-type').innerText = type;
+            finalType = type || 'Alto'; // Fallback
+            const d = voiceProfiles[finalType];
+            document.getElementById('voice-type').innerText = finalType;
             document.getElementById('result-emoji').innerText = d.emoji;
             document.getElementById('superpower-name').innerText = d.superpower;
             document.getElementById('encouragement').innerText = d.text;
             document.getElementById('famous-singers').innerText = d.famous;
-            
-            if (typeof google !== 'undefined' && google.script && google.script.run) {
-                google.script.run.saveResult(userName, type, userChoir);
-            }
+            document.getElementById('audition-songs').innerText = d.songs;
         }
 
         function downloadResults() {
-            const date = new Date().toLocaleDateString();
-            const content = `
-VOCAL QUEST: MISSION COMPLETE
--------------------------------
-HERO NAME: ${userName}
-DATE: ${date}
-CHOIR: ${userChoir.toUpperCase()}
-
-VOICE TYPE: ${finalType}
-SUPERPOWER: ${voiceProfiles[finalType].superpower}
-
-VOCAL RANGE RECORDED:
-Lowest: ${getNoteName(minMidi)}
-Highest: ${getNoteName(maxMidi)}
--------------------------------
-Take a screenshot or upload this to Google Classroom!
-            `.trim();
-            
+            const content = `VOCAL QUEST MISSION COMPLETE\nNAME: ${userName}\nCHOIR: ${userChoir}\nVOICE PROFILE: ${userAnatomy}\nTYPE: ${finalType}\nRANGE: ${getNoteName(minMidi)} - ${getNoteName(maxMidi)}\nSONGS: ${voiceProfiles[finalType].songs}`;
             const element = document.createElement('a');
-            const file = new Blob([content], {type: 'text/plain'});
-            element.href = URL.createObjectURL(file);
-            element.download = `${userName.replace(/\s+/g, '_')}_VocalQuest_Result.txt`;
-            document.body.appendChild(element);
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+            element.setAttribute('download', `${userName}_VocalQuest.txt`);
             element.click();
-            document.body.removeChild(element);
         }
     </script>
 </body>
